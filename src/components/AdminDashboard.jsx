@@ -135,20 +135,21 @@ function AdminDashboard() {
     <div className="p-8 bg-gray-50 min-h-screen">
       <h2 className="text-3xl font-semibold text-gray-800 mb-6">Dashboard do Administrador</h2>
 
+      {/* Toggle de views */}
       <div className="flex space-x-2 mb-6">
         {['supermarkets', 'businessIntelligence'].map(v => (
           <button
             key={v}
             onClick={() => setView(v)}
             className={`flex-1 px-6 py-2 rounded-full transition-all duration-300 font-medium text-sm
-        ${view === v ? 'bg-gray-300 text-gray-900 shadow-lg' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+              ${view === v ? 'bg-gray-300 text-gray-900 shadow-lg' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
           >
             {v === 'supermarkets' ? 'Supermercados' : 'Business Intelligence'}
           </button>
         ))}
       </div>
 
-
+      {/* Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-sm text-gray-500">Total de Supermercados</h3>
@@ -168,35 +169,40 @@ function AdminDashboard() {
         </div>
       </div>
 
+      {/* Views */}
       {view === 'supermarkets' ? (
-        <div>
-          <div className="bg-white p-6 rounded-lg shadow mb-8">
-            <div className="flex justify-between mb-4">
-              <h3 className="text-xl font-semibold">Gestão de Supermercados</h3>
-              <button
-                onClick={openModal}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              >
-                Novo Supermercado
-              </button>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 mb-6">
-              <input
-                type="text"
-                placeholder="Filtrar por nome..."
-                value={filterName}
-                onChange={e => setFilterName(e.target.value)}
-                className="border px-4 py-2 rounded w-full sm:w-1/2"
-              />
-              <input
-                type="text"
-                placeholder="Filtrar por localização..."
-                value={filterLocation}
-                onChange={e => setFilterLocation(e.target.value)}
-                className="border px-4 py-2 rounded w-full sm:w-1/2"
-              />
-            </div>
-            <table className="w-full table-auto">
+        <div className="bg-white p-6 rounded-lg shadow mb-8">
+          <div className="flex justify-between mb-4">
+            <h3 className="text-xl font-semibold">Gestão de Supermercados</h3>
+            <button
+              onClick={openModal}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Novo Supermercado
+            </button>
+          </div>
+
+          {/* Filtros */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <input
+              type="text"
+              placeholder="Filtrar por nome..."
+              value={filterName}
+              onChange={e => setFilterName(e.target.value)}
+              className="border px-4 py-2 rounded w-full sm:w-1/2"
+            />
+            <input
+              type="text"
+              placeholder="Filtrar por localização..."
+              value={filterLocation}
+              onChange={e => setFilterLocation(e.target.value)}
+              className="border px-4 py-2 rounded w-full sm:w-1/2"
+            />
+          </div>
+
+          {/* Tabela responsiva */}
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto min-w-[700px]">
               <thead className="bg-gray-100">
                 <tr>
                   <th className="px-4 py-2 text-left">Nome</th>
@@ -210,7 +216,7 @@ function AdminDashboard() {
               </thead>
               <tbody>
                 {filteredSupermarkets.map((market, idx) => (
-                  <tr key={idx} className="border-t">
+                  <tr key={idx} className="border-t hover:bg-gray-50">
                     <td className="px-4 py-2">{market.name}</td>
                     <td className="px-4 py-2">{market.location}</td>
                     <td className="px-4 py-2">{market.products}</td>
@@ -247,6 +253,7 @@ function AdminDashboard() {
         </div>
       )}
 
+      {/* Modal */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}

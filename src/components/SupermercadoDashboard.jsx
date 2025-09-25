@@ -7,7 +7,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, T
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 
 function SupermercadoDashboard() {
-  const [view, setView] = useState('products'); 
+  const [view, setView] = useState('products');
 
   const [products, setProducts] = useState([
     { name: "Arroz Tipo 1", category: "Alimentos", price: 20.50, stock: 150, status: "Disponível" },
@@ -25,7 +25,6 @@ function SupermercadoDashboard() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [newProduct, setNewProduct] = useState({ name: '', category: '', price: '', stock: '', status: '' });
 
-  // Filtros
   const [filterName, setFilterName] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
 
@@ -54,7 +53,6 @@ function SupermercadoDashboard() {
   const revenueToday = sales.reduce((acc, cur) => acc + cur.ticket, 0);
   const avgTicket = (revenueToday / (salesToday || 1)).toFixed(2);
 
-  // Dados para gráfico de barras: Vendas por categoria
   const categories = [...new Set(products.map(p => p.category))];
   const salesByCategory = categories.map(cat => {
     return sales
@@ -71,7 +69,6 @@ function SupermercadoDashboard() {
     }],
   };
 
-  // Dados para gráfico de pizza: Métodos de pagamento
   const paymentMethods = [...new Set(sales.map(s => s.payment))];
   const salesByPayment = paymentMethods.map(method =>
     sales.filter(s => s.payment === method).reduce((acc, cur) => acc + cur.ticket, 0)
@@ -85,11 +82,9 @@ function SupermercadoDashboard() {
     }],
   };
 
-  // Produtos filtrados
   const filteredProducts = products.filter(prod => {
     const matchesName = prod.name.toLowerCase().includes(filterName.toLowerCase());
     const matchesCategory = prod.category.toLowerCase().includes(filterCategory.toLowerCase());
-
     if (filterName && filterCategory) return matchesName && matchesCategory;
     if (filterName) return matchesName;
     if (filterCategory) return matchesCategory;
@@ -100,7 +95,6 @@ function SupermercadoDashboard() {
     <div className="p-8 bg-gray-50 min-h-screen">
       <h2 className="text-3xl font-semibold text-gray-800 mb-6">Dashboard do Supermercado</h2>
 
-      {/* Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-sm text-gray-500">Total de Produtos</h3>
@@ -120,7 +114,6 @@ function SupermercadoDashboard() {
         </div>
       </div>
 
-      {/* Toggle moderno */}
       <div className="flex space-x-2 mb-6">
         {['products', 'sales', 'charts'].map(v => (
           <button
@@ -134,7 +127,6 @@ function SupermercadoDashboard() {
         ))}
       </div>
 
-      {/* Views */}
       {view === 'products' && (
         <div className="bg-white p-6 rounded-lg shadow mb-8">
           <div className="flex justify-between mb-4">
@@ -147,7 +139,6 @@ function SupermercadoDashboard() {
             </button>
           </div>
 
-          {/* Filtros */}
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <input
               type="text"
@@ -165,66 +156,70 @@ function SupermercadoDashboard() {
             />
           </div>
 
-          <table className="w-full table-auto">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-4 py-2 text-left">Produto</th>
-                <th className="px-4 py-2 text-left">Categoria</th>
-                <th className="px-4 py-2 text-left">Preço</th>
-                <th className="px-4 py-2 text-left">Estoque</th>
-                <th className="px-4 py-2 text-left">Status</th>
-                <th className="px-4 py-2 text-left">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredProducts.map((prod, idx) => (
-                <tr key={idx} className="border-t hover:bg-gray-50">
-                  <td className="px-4 py-2">{prod.name}</td>
-                  <td className="px-4 py-2">{prod.category}</td>
-                  <td className="px-4 py-2">R$ {prod.price.toFixed(2)}</td>
-                  <td className="px-4 py-2">{prod.stock}</td>
-                  <td className="px-4 py-2">{prod.status}</td>
-                  <td className="px-4 py-2 flex gap-3">
-                    <FaEye className="text-blue-600 cursor-pointer" title="Visualizar" />
-                    <FaEdit className="text-yellow-600 cursor-pointer" title="Editar" />
-                    <FaTrash className="text-red-600 cursor-pointer" title="Excluir" />
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto min-w-[600px]">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-4 py-2 text-left">Produto</th>
+                  <th className="px-4 py-2 text-left">Categoria</th>
+                  <th className="px-4 py-2 text-left">Preço</th>
+                  <th className="px-4 py-2 text-left">Estoque</th>
+                  <th className="px-4 py-2 text-left">Status</th>
+                  <th className="px-4 py-2 text-left">Ações</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredProducts.map((prod, idx) => (
+                  <tr key={idx} className="border-t hover:bg-gray-50">
+                    <td className="px-4 py-2">{prod.name}</td>
+                    <td className="px-4 py-2">{prod.category}</td>
+                    <td className="px-4 py-2">R$ {prod.price.toFixed(2)}</td>
+                    <td className="px-4 py-2">{prod.stock}</td>
+                    <td className="px-4 py-2">{prod.status}</td>
+                    <td className="px-4 py-2 flex gap-3">
+                      <FaEye className="text-blue-600 cursor-pointer" title="Visualizar" />
+                      <FaEdit className="text-yellow-600 cursor-pointer" title="Editar" />
+                      <FaTrash className="text-red-600 cursor-pointer" title="Excluir" />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {view === 'sales' && (
         <div className="bg-white p-6 rounded-lg shadow mb-8">
           <h3 className="text-xl font-semibold mb-4">Lista de Vendas</h3>
-          <table className="w-full table-auto">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-4 py-2 text-left">Produto</th>
-                <th className="px-4 py-2 text-left">Qtd</th>
-                <th className="px-4 py-2 text-left">Ticket</th>
-                <th className="px-4 py-2 text-left">Pagamento</th>
-                <th className="px-4 py-2 text-left">Data/Hora</th>
-                <th className="px-4 py-2 text-left">Perfil do Cliente</th>
-                <th className="px-4 py-2 text-left">Frequência</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sales.map((sale, idx) => (
-                <tr key={idx} className="border-t hover:bg-gray-50">
-                  <td className="px-4 py-2">{sale.product}</td>
-                  <td className="px-4 py-2">{sale.quantity}</td>
-                  <td className="px-4 py-2">R$ {sale.ticket.toFixed(2)}</td>
-                  <td className="px-4 py-2">{sale.payment}</td>
-                  <td className="px-4 py-2">{sale.datetime}</td>
-                  <td className="px-4 py-2">{sale.profile}</td>
-                  <td className="px-4 py-2">{sale.frequency}</td>
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto min-w-[700px]">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-4 py-2 text-left">Produto</th>
+                  <th className="px-4 py-2 text-left">Qtd</th>
+                  <th className="px-4 py-2 text-left">Ticket</th>
+                  <th className="px-4 py-2 text-left">Pagamento</th>
+                  <th className="px-4 py-2 text-left">Data/Hora</th>
+                  <th className="px-4 py-2 text-left">Perfil do Cliente</th>
+                  <th className="px-4 py-2 text-left">Frequência</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {sales.map((sale, idx) => (
+                  <tr key={idx} className="border-t hover:bg-gray-50">
+                    <td className="px-4 py-2">{sale.product}</td>
+                    <td className="px-4 py-2">{sale.quantity}</td>
+                    <td className="px-4 py-2">R$ {sale.ticket.toFixed(2)}</td>
+                    <td className="px-4 py-2">{sale.payment}</td>
+                    <td className="px-4 py-2">{sale.datetime}</td>
+                    <td className="px-4 py-2">{sale.profile}</td>
+                    <td className="px-4 py-2">{sale.frequency}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
@@ -241,7 +236,6 @@ function SupermercadoDashboard() {
         </div>
       )}
 
-      {/* Modal */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
