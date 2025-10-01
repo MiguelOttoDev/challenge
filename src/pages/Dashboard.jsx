@@ -1,10 +1,9 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminDashboard from "../components/AdminDashboard";
 import SupermercadoDashboard from "../components/SupermercadoDashboard";
-import EmployeeDashboard from "../components/EmployeeDashboard";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import Operador from "../components/Operador";
 import Navbar from "../components/NavBar";
-import { FaEye, FaEdit, FaTrash } from "react-icons/fa";  // Importando ícones
 
 function Dashboard() {
   const [perfil, setPerfil] = useState("");
@@ -16,7 +15,7 @@ function Dashboard() {
     const usuario = localStorage.getItem("usuario");
 
     if (!perfil || !usuario) {
-      navigate("/login"); // Redirecionar para login caso não haja perfil
+      navigate("/login");
     }
 
     setPerfil(perfil);
@@ -26,13 +25,12 @@ function Dashboard() {
   return (
     <div className="dashboard-container">
       <Navbar />
-      
-      {/* Renderização condicional com base no perfil */}
+
       {perfil === "admin" && <AdminDashboard />}
       {perfil === "supermercado" && <SupermercadoDashboard />}
-      {perfil === "funcionario" && <EmployeeDashboard />}
+      {perfil === "operador" && <Operador />}
     </div>
   );
 }
 
-export default Dashboard
+export default Dashboard;
